@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TooltipTextView">
+        <attr name="tooltipTextSize" format="dimension"/>
+        <attr name="tooltipTextColor" format="integer"/>
+        <attr name="tooltipText" format="string"/>
+        <attr name="tooltipBackgroundColor" format="integer"/>
+
+    </declare-styleable>
+
+</resources>
