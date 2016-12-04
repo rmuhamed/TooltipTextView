@@ -28,8 +28,17 @@ public class TooltipTextView extends View {
 	private Rect aRectangle;
 	private Path aPath;
 
+	private int rectangleHeight;
+	private int rectangleWidth;
+
+	private Point aTrianglePoint1;
+	private Point aTrianglePoint2;
+	private Point aTrianglePoint3;
+
 	public TooltipTextView(Context context) {
 		super(context);
+
+		this.initialize();
 	}
 
 	public TooltipTextView(Context context, AttributeSet attrs) {
@@ -50,17 +59,58 @@ public class TooltipTextView extends View {
 	}
 
 	@Override
+	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+		this.rectangleHeight = (int) (heightMeasureSpec * 0.75);
+		this.rectangleWidth = widthMeasureSpec;
+
+		this.aTrianglePoint1.set((int) (this.getMeasuredWidth() * 0.40), rectangleHeight);
+		this.aTrianglePoint2.set((int) (this.getMeasuredWidth() * 0.60), rectangleHeight);
+		this.aTrianglePoint3.set((int) (this.getMeasuredWidth() * 0.5), this.getMeasuredHeight());
+
+		this.setMeasuredDimension(widthMeasureSpec, heightMeasureSpec);
+	}
+
+	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 
-		int rectangleHeight = (int) (this.getMeasuredHeight() * 0.75);
-		int rectangleWidth = this.getMeasuredWidth();
-		int textPositionX = rectangleWidth/2;
-		int textPositionY = rectangleHeight/2;
+		int textPositionX = this.rectangleWidth/2;
+		int textPositionY = this.rectangleHeight/2;
 
-		this.drawRectangle(canvas, this.aRectangle, this.rectanglePaint, this.backgroundColor, rectangleHeight, rectangleWidth);
-		this.drawText(canvas, this.rectanglePaint, this.textColor, this.textSize, textPositionX, textPositionY, Paint.Align.CENTER);
-		this.drawTriangle(canvas, this.trianglePaint, this.backgroundColor, rectangleHeight);
+		this.drawRectangle(canvas, this.aRectangle, this.rectanglePaint, this.backgroundColor);
+		this.drawText(canvas, this.rectanglePaint, this.textColor, this.textSize, textPositionX, textPositionY);
+		this.drawTriangle(canvas, this.trianglePaint, this.backgroundColor);
+	}
+
+	private void drawTriangle(Canvas canvas, Paint trianglePaint, int backgroundColor) {
+		trianglePaint.setColor(backgroundColor);
+		trianglePaint.setStyle(Paint.Style.FILL);
+
+		this.aPath.setFillType(Path.FillType.EVEN_ODD);
+		this.aPath.moveTo(this.aTrianglePoint1.x, this.aTrianglePoint1.y);
+		this.aPath.lineTo(this.aTrianglePoint2.x, this.aTrianglePoint2.y);
+		this.aPath.lineTo(this.aTrianglePoint3.x, this.aTrianglePoint3.y);
+		this.aPath.lineTo(this.aTrianglePoint1.x, this.aTrianglePoint1.y);
+		this.aPath.close();
+
+		canvas.drawPath(this.aPath, this.trianglePaint);
+	}
+
+	private void drawText(Canvas canvas, Paint aPaint, int textColor, int textSize, int x, int y) {
+		aPaint.setColor(textColor);
+		aPaint.setTextSize(textSize);
+		aPaint.setTextAlign(Paint.Align.CENTER);
+		canvas.drawText(this.tooltipText, x, y, aPaint);
+	}
+
+	private void drawRectangle(Canvas canvas, Rect aRectangle, Paint rectanglePaint, int backgroundColor) {
+		aRectangle.set(0, 0, this.rectangleWidth, this.rectangleHeight);
+
+		rectanglePaint.setColor(backgroundColor);
+		rectanglePaint.setStyle(Paint.Style.FILL);
+		canvas.drawRect(aRectangle, rectanglePaint);
 	}
 
 	private void initialize() {
@@ -70,38 +120,9 @@ public class TooltipTextView extends View {
 		this.aRectangle = new Rect();
 
 		this.aPath = new Path();
-		this.aPath.setFillType(Path.FillType.EVEN_ODD);
-	}
 
-	private void drawTriangle(Canvas canvas, Paint trianglePaint, int backgroundColor, int rectangleHeight) {
-		trianglePaint.setColor(backgroundColor);
-		trianglePaint.setStyle(Paint.Style.FILL);
-
-		Point aTrianglePoint1 = new Point((int) (this.getMeasuredWidth() * 0.40), rectangleHeight);
-		Point aTrianglePoint2 = new Point((int) (this.getMeasuredWidth() * 0.60), rectangleHeight);
-		Point aTrianglePoint3 = new Point((int) (this.getMeasuredWidth() * 0.5), this.getMeasuredHeight());
-
-		this.aPath.moveTo(aTrianglePoint1.x, aTrianglePoint1.y);
-		this.aPath.lineTo(aTrianglePoint2.x, aTrianglePoint2.y);
-		this.aPath.lineTo(aTrianglePoint3.x, aTrianglePoint3.y);
-		this.aPath.lineTo(aTrianglePoint1.x, aTrianglePoint1.y);
-		this.aPath.close();
-
-		canvas.drawPath(this.aPath, this.trianglePaint);
-	}
-
-	private void drawText(Canvas canvas, Paint aPaint, int textColor, int textSize, int x, int y, Paint.Align align) {
-		aPaint.setColor(textColor);
-		aPaint.setTextSize(textSize);
-		aPaint.setTextAlign(align);
-		canvas.drawText(this.tooltipText, x, y, aPaint);
-	}
-
-	private void drawRectangle(Canvas canvas, Rect aRectangle, Paint rectanglePaint, int backgroundColor, int rectangleHeight, int rectangleWidth) {
-		aRectangle.set(0, 0, rectangleWidth, rectangleHeight);
-
-		rectanglePaint.setColor(backgroundColor);
-		rectanglePaint.setStyle(Paint.Style.FILL);
-		canvas.drawRect(aRectangle, rectanglePaint);
+		this.aTrianglePoint1 = new Point();
+		this.aTrianglePoint2 = new Point();
+		this.aTrianglePoint3 = new Point();
 	}
 }
