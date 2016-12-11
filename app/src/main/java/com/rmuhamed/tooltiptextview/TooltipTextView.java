@@ -10,7 +10,7 @@ import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.rmuhamed.tooltiptextview.helper.ConverstionHelper;
+import com.rmuhamed.tooltiptextview.helper.ConversionHelper;
 
 /**
  * Created by rmuhamed on 02/12/2016.
@@ -62,8 +62,8 @@ public class TooltipTextView extends View {
 
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		int parentHeight = ConverstionHelper.toDP(MeasureSpec.getSize(heightMeasureSpec), this.getContext());
-		int parentWidth = ConverstionHelper.toDP(MeasureSpec.getSize(widthMeasureSpec), this.getContext());
+		int parentHeight = ConversionHelper.with(this.getContext()).toDP(MeasureSpec.getSize(heightMeasureSpec));
+		int parentWidth = ConversionHelper.with(this.getContext()).toDP(MeasureSpec.getSize(widthMeasureSpec));
 
 		this.rectangleHeight = (int) (parentHeight * 0.30);
 		this.rectangleWidth = parentWidth;
