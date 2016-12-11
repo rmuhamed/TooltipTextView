@@ -60,16 +60,18 @@ public class TooltipTextView extends View {
 
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+		int screenHeight = MeasureSpec.getSize(heightMeasureSpec);
 
-		this.rectangleHeight = (int) (heightMeasureSpec * 0.75);
-		this.rectangleWidth = widthMeasureSpec;
+		this.rectangleHeight = (int) (screenHeight * 0.25);
+		this.rectangleWidth = MeasureSpec.getSize(widthMeasureSpec);
 
-		this.aTrianglePoint1.set((int) (this.getMeasuredWidth() * 0.40), rectangleHeight);
-		this.aTrianglePoint2.set((int) (this.getMeasuredWidth() * 0.60), rectangleHeight);
-		this.aTrianglePoint3.set((int) (this.getMeasuredWidth() * 0.5), this.getMeasuredHeight());
+		this.aTrianglePoint1.set((int) (this.rectangleWidth * 0.40), this.rectangleHeight);
+		this.aTrianglePoint2.set((int) (this.rectangleWidth * 0.60), this.rectangleHeight);
+		this.aTrianglePoint3.set((int) (this.rectangleWidth * 0.5), screenHeight);
 
 		this.setMeasuredDimension(widthMeasureSpec, heightMeasureSpec);
+
+		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 	}
 
 	@Override
