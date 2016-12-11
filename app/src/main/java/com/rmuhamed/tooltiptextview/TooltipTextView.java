@@ -10,6 +10,8 @@ import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.rmuhamed.tooltiptextview.helper.ConverstionHelper;
+
 /**
  * Created by rmuhamed on 02/12/2016.
  */
@@ -60,14 +62,15 @@ public class TooltipTextView extends View {
 
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		int screenHeight = MeasureSpec.getSize(heightMeasureSpec);
+		int parentHeight = ConverstionHelper.toDP(MeasureSpec.getSize(heightMeasureSpec), this.getContext());
+		int parentWidth = ConverstionHelper.toDP(MeasureSpec.getSize(widthMeasureSpec), this.getContext());
 
-		this.rectangleHeight = (int) (screenHeight * 0.25);
-		this.rectangleWidth = MeasureSpec.getSize(widthMeasureSpec);
+		this.rectangleHeight = (int) (parentHeight * 0.30);
+		this.rectangleWidth = parentWidth;
 
 		this.aTrianglePoint1.set((int) (this.rectangleWidth * 0.40), this.rectangleHeight);
 		this.aTrianglePoint2.set((int) (this.rectangleWidth * 0.60), this.rectangleHeight);
-		this.aTrianglePoint3.set((int) (this.rectangleWidth * 0.5), screenHeight);
+		this.aTrianglePoint3.set((int) (this.rectangleWidth * 0.5), (this.rectangleHeight - parentHeight) * -1);
 
 		this.setMeasuredDimension(widthMeasureSpec, heightMeasureSpec);
 
